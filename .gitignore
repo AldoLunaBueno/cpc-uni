@@ -1,0 +1,37 @@
+# --- Binarios y Ejecutables ---
+# Ignora los archivos generados por g++ y tus scripts (crun y ctest)
+*.out
+*.exe
+*.o
+*.app
+*.stackdump
+
+# --- Archivos Temporales de Testing ---
+# El archivo que genera ctest.sh para comparar salidas
+temp_out.txt
+
+# --- Herramientas y Editores ---
+# VS Code
+.vscode/
+*.code-workspace
+
+# Extensiones de C++ (logs o caché de IntelliSense)
+.cache/
+ipch/
+
+# --- Sistema Operativo ---
+# Windows
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# --- Otros ---
+# Si alguna vez usas Python para generar casos de prueba masivos
+__pycache__/
+*.py[cod]
+*$py.class
