@@ -1,29 +1,30 @@
 #!/bin/bash
 
-if [ ! -f "main.cpp" ]; then
-    echo "❌ No se encontró main.cpp en el directorio actual."
+# Detectar de forma automática el lenguaje del problema actual
+if [ -f "main.cpp" ]; then
+    MODE="C++"
+    echo "🔨 Compilando C++..."
+    g++ -O2 -Wall -Wextra -std=c++17 main.cpp -o main.out
+    if [ $? -ne 0 ]; then
+        echo "❌ Error de compilación."
+        exit 1
+    fi
+    RUN_CMD="./main.out"
+elif [ -f "main.py" ]; then
+    MODE="Python"
+    RUN_CMD="python3 main.py"
+else
+    echo "❌ No se encontró main.cpp ni main.py en este directorio."
     exit 1
 fi
 
-echo "🔨 Compilando..."
-# Flags recomendadas para programación competitiva
-g++ -O2 -Wall -Wextra -std=c++17 main.cpp -o main.out
-
-if [ $? -ne 0 ]; then
-    echo "❌ Error de compilación."
-    exit 1
-fi
-
-echo "🚀 Ejecutando pruebas..."
-# Iterar sobre cualquier archivo que empiece con 'in' y termine en '.txt'
+echo "🚀 Ejecutando pruebas locales ($MODE)..."
 for in_file in in*.txt; do
-    # Validar si no existen archivos (evita que el for falle)
     if [ ! -e "$in_file" ]; then
         echo "⚠️ No se encontraron archivos de entrada (in*.txt)."
         break
     fi
 
-    # Extraer el número del archivo (ej. saca el '2' de 'in2.txt')
     num=$(echo "$in_file" | sed 's/[^0-9]//g')
     out_file="out${num}.txt"
     
@@ -32,10 +33,9 @@ for in_file in in*.txt; do
         continue
     fi
 
-    # Ejecutar guardando la salida en un archivo temporal
-    ./main.out < "$in_file" > "temp_out.txt"
+    # Ejecutar la solución inyectando el caso de prueba
+    $RUN_CMD < "$in_file" > "temp_out.txt"
     
-    # Ignorar espacios en blanco al final de la línea/archivo con -w
     if diff -w -q "temp_out.txt" "$out_file" > /dev/null; then
         echo "✅ Test $num: AC (Accepted)"
     else
@@ -48,5 +48,5 @@ for in_file in in*.txt; do
     fi
 done
 
-# Limpieza
+# Limpieza de temporales
 rm -f temp_out.txt main.out
