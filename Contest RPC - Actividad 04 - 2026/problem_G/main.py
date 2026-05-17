@@ -1,4 +1,5 @@
-# Resuelto??
+# KTH Challenge Posters
+# Resuelto
 
 import sys
 
